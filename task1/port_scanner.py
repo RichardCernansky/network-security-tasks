@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+"""
+Port Scanner - Assignment 3
+Supports TCP SYN, TCP Connect and TCP ACK scans with optional service detection.
+Usage: sudo python3 port_scanner.py --target 192.168.128.2 --scan syn --ports 1-1024
+"""
+
+import argparse
+import socket
+import sys
+from scapy.all import IP, TCP, sr1, conf
+
+# Suppress Scapy output
+conf.verb = 0
+
+# Well known ports and their service names for fallback lookup
+WELL_KNOWN_PORTS = {
+    21:   "FTP",
+    22:   "SSH",
+    23:   "Telnet",
+    25:   "SMTP",
+    53:   "DNS",
+    80:   "HTTP",
+    110:  "POP3",
+    143:  "IMAP",
+    443:  "HTTPS",
+    3306: "MySQL",
+    5432: "PostgreSQL",
+    6379: "Redis",
+    8080: "HTTP-Alt",
+}
+
+
+def parse_ports(port_str: str) -> list:
+    """Parse a port range string like 1-1024 or a single port like 80 into a list."""
+    if "-" in port_str:
+        start, end = port_str.split("-")
+        return list(range(int(start), int(end) + 1))
+    else:
+        return [int(port_str)]
+
+
+def grab_banner(ip: str, port: int) -> str:
+    """
+    Connect to a port and read the banner the service sends on connection.
+    Many services like FTP, SSH, SMTP introduce themselves immediately upon connecting.
+    This is what the hint in the assignment refers to.
+    """
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(2)
+        s.connect((ip, port))
+        # Some services need a nudge to send their banner
+        # HTTP needs a request, others send banner immediately
+        if port == 80 or port == 8080:
+            s.send(b"HEAD / HTTP/1.0\r\n\r\n")
+        banner = s.recv(1024).decode(errors="ignore").strip()
+        s.close()
+        return banner
+    except Exception:
+        return ""
+
+
+def get_service_name(port: int, banner: str) -> str:
+    """
+    Determine service name and version from banner or well known port number.
+    Real service detection uses the banner the service sends on connect.
+    """
+    if banner:
+        # SSH banners look like: SSH-2.0-OpenSSH_8.4
+        if banner.startswith("SSH"):
+            return banner.split("\n")[0].strip()
+        # FTP banners look like: 220 vsftpd 3.0.3
+        if banner.startswith("220"):
+            return banner.split("\n")[0].strip()
+        # SMTP looks like: 220 mail.example.com ESMTP
+        if "SMTP" in banner or "ESMTP" in banner:
+            return banner.split("\n")[0].strip()
+        # HTTP response
+        if "HTTP" in banner:
+            # Try to find Server header
+            for line in banner.split("\n"):
+                if line.lower().startswith("server:"):
+                    return line.strip()
+            return "HTTP"
+        # Return first line of any other banner
+        first_line = banner.split("\n")[0].strip()
+        if first_line:
+            return first_line[:60]  # truncate very long banners
+
+    # Fall back to well known port lookup
+    return WELL_KNOWN_PORTS.get(port, "unknown")
+
+
+def scan_syn(target: str, port: int) -> str:
+    """
+    TCP SYN scan (half-open scan).
+    Sends a SYN packet and checks the response without completing the handshake.
+    open     = SYN-ACK received (port is listening)
+    closed   = RST received (port is not listening)
+    filtered = no response (firewall is blocking)
+    """
+    pkt = IP(dst=target) / TCP(dport=port, flags="S")
+    resp = sr1(pkt, timeout=1)
+
+    if resp is None:
+        return "filtered"
+    elif resp.haslayer(TCP):
+        if resp[TCP].flags == 0x12:  # SYN-ACK
+            # Send RST to close the half-open connection cleanly
+            rst = IP(dst=target) / TCP(dport=port, flags="R", seq=resp[TCP].ack)
+            sr1(rst, timeout=1)
+            return "open"
+        elif resp[TCP].flags == 0x04:  # RST-ACK, RST
+            return "closed"
+    return "filtered"
+
+
+def scan_connect(target: str, port: int) -> str:
+    """
+    TCP Connect scan.
+    Completes the full three-way handshake using the OS socket.
+    Slower and more detectable than SYN scan but does not need raw socket privileges.
+    open   = connection succeeded
+    closed = connection refused
+    """
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(1)
+        result = s.connect_ex((target, port))
+        s.close()
+        if result == 0:
+            return "open"
+        else:
+            return "closed"
+    except Exception:
+        return "filtered"
+
+
+def scan_ack(target: str, port: int) -> str:
+    pkt = IP(dst=target) / TCP(dport=port, flags="A", seq=12345)
+    resp = sr1(pkt, timeout=0.5, verbose=False)
+
+    if resp is None:
+        return "filtered"
+    elif resp.haslayer(TCP):
+        if resp[TCP].flags & 0x04:  # RST bit set
+            return "unfiltered"
+    elif resp.haslayer("ICMP"):
+        return "filtered"
+    return "filtered"
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Port scanner using Scapy - supports SYN, Connect and ACK scans"
+    )
+    parser.add_argument(
+        "--target", "-t",
+        required=True,
+        help="IP address of the target"
+    )
+    parser.add_argument(
+        "--scan", "-s",
+        choices=["syn", "connect", "ack"],
+        required=True,
+        help="Type of scan: syn, connect or ack"
+    )
+    parser.add_argument(
+        "--ports", "-p",
+        default="1-65535",
+        help="Port range to scan e.g. 1-1024 or single port e.g. 80 (default: all ports)"
+    )
+    parser.add_argument(
+        "--service", "-sv",
+        action="store_true",
+        help="Enable service detection by grabbing banners"
+    )
+    args = parser.parse_args()
+
+    target   = args.target
+    ports    = parse_ports(args.ports)
+    scan_type = args.scan
+
+    print(f"[*] Target     : {target}")
+    print(f"[*] Scan type  : {scan_type.upper()}")
+    print(f"[*] Port range : {args.ports}")
+    print(f"[*] Service det: {'yes' if args.service else 'no'}")
+    print(f"[*] Scanning {len(ports)} port(s)...\n")
+
+    # Pick the scan function based on type argument
+    scan_functions = {
+        "syn":     scan_syn,
+        "connect": scan_connect,
+        "ack":     scan_ack,
+    }
+    scan_fn = scan_functions[scan_type]
+
+    open_ports = []
+
+    for port in ports:
+        state = scan_fn(target, port)
+
+        # For ACK scan we report unfiltered instead of open
+        interesting = state in ("open", "unfiltered")
+
+        if interesting:
+            service = ""
+            if args.service:
+                banner = grab_banner(target, port)
+                service = get_service_name(port, banner)
+
+            open_ports.append((port, state, service))
+            service_str = f"  {service}" if service else ""
+            print(f"  PORT {port:<6} {state:<12}{service_str}")
+        else:
+            # Only print closed/filtered if scanning a small range
+            if len(ports) <= 100:
+                print(f"  PORT {port:<6} {state}")
+
+    print(f"\n[*] Scan complete. {len(open_ports)} port(s) found interesting.")
+
+
+if __name__ == "__main__":
+    main()

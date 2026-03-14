@@ -1,0 +1,24 @@
+ARP spoofing
+#And with the bonus sniffing:
+sudo python3 arp_spoof.py 192.168.128.2 192.168.128.4 --iface eth0 --sniff
+
+HTTP sniffing
+sudo python3 http_sniffer.py --iface eth0 --filter 192.168.128.2 192.168.128.4
+
+1. Enable IP forwarding on Kali
+   sudo sysctl -w net.ipv4.ip_forward=1
+
+2. Run ARP spoofing on Kali (keep it running)
+   sudo python3 arp_spoof.py 192.168.128.2 192.168.128.4 --iface eth0
+
+3. Run HTTP sniffer on Kali (new terminal tab)
+   sudo python3 http_sniffer.py --iface eth0 --filter 192.168.128.2 192.168.128.4
+
+4. Start HTTP server on Debian1
+   python3 -m http.server 80
+
+5. Send requests from Debian2
+   wget "http://192.168.128.2/?password=secret-password987"
+   
+should it write all the ports out?
+should i register rst alone?
