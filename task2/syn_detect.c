@@ -225,6 +225,8 @@ static void usage(const char *prog)
 
 int main(int argc, char *argv[])
 {
+    setbuf(stdout, NULL);  /* disable output buffering */
+    
     if (argc != 2) {
         usage(argv[0]);
         return EXIT_FAILURE;
