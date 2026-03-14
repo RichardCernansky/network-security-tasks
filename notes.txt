@@ -1,0 +1,14 @@
+# ssh to debian1
+ssh debian@192.168.128.2
+
+#create and give IP to kali on the private network (only has IP on the shared one if two interfaces)
+automatic from sudo vim /etc/network/interfaces
+
+
+#set syncookies on debian to 0
+# On Debian set securities off, on rp_filter - filter both - kernel takes the stricter with 0
+sudo sysctl -w net.ipv4.tcp_syncookies=0
+sudo sysctl -w net.ipv4.conf.all.rp_filter=0 
+sudo sysctl -w net.ipv4.conf.enp0s1.rp_filter=0
+
+curl http://192.168.128.2
