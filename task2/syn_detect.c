@@ -29,7 +29,7 @@
 #include <arpa/inet.h>
 
 /* ---------- Tunable parameters ---------- */
-#define SYN_THRESHOLD       100    /* SYN packets/s to trigger alert    */
+#define SYN_THRESHOLD       50    /* SYN packets/s to trigger alert    */
 #define WINDOW_SEC          1      /* Measurement window in seconds     */
 #define COOLDOWN_SEC        5      /* Seconds below threshold to end    */
 #define SEQ_THRESHOLD       50     /* SYN/s from one source = sequential*/
@@ -166,6 +166,7 @@ static void evaluate_window(void)
             printf("*** ATTACK ENDED — SYN flood stopped "
                    "(below threshold for %d s) ***\n", COOLDOWN_SEC);
             g_det.attack_active = 0;
+            g_running = 0; 
         } else {    // rate only dropped
             print_time();
             printf("    Rate dropped (%u SYN/s), cooldown...\n", rate);
