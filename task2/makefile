@@ -2,7 +2,7 @@ CC      = gcc
 CFLAGS  = -Wall -Wextra -Werror -pedantic -O2 -std=c11
 LDPCAP  = -lpcap
 
-all: syn_flood syn_detect POD_detect 
+all: syn_flood syn_detect pod_detect 
 
 syn_flood: syn_flood.c
 	$(CC) $(CFLAGS) -o $@ $<
@@ -10,7 +10,7 @@ syn_flood: syn_flood.c
 syn_detect: syn_detect.c
 	$(CC) $(CFLAGS) -o $@ $< $(LDPCAP)
 
-POD_detect: POD_detect.c
+pod_detect: pod_detect.c
 	$(CC) $(CFLAGS) -o $@ $< $(LDPCAP)
 
 clean:
