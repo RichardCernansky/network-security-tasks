@@ -77,10 +77,12 @@ static src_entry_t *record_source(uint32_t ip)
     /* Linear probing (table is large enough for burst tracking) */
     for (unsigned i = 0; i < MAX_TRACKED_SRCS; i++) {
         unsigned slot = (idx + i) % MAX_TRACKED_SRCS;
+        // matched the ip
         if (g_det.sources[slot].ip == ip) {
             g_det.sources[slot].count++;
             return &g_det.sources[slot];
         }
+        // the ip is not yet tracked -> claim the slot
         if (g_det.sources[slot].ip == 0) {
             g_det.sources[slot].ip    = ip;
             g_det.sources[slot].count = 1;
@@ -117,7 +119,7 @@ static void evaluate_window(void)
 {
     time_t now = time(NULL);
 
-    /* Still inside the same 1-second window? */
+    // Still inside the same 1-second window -> return
     if (difftime(now, g_det.window_start) < WINDOW_SEC) {
         return;
     }
@@ -125,10 +127,11 @@ static void evaluate_window(void)
     /* Window elapsed — compute rate */
     unsigned rate = g_det.syn_count;  /* SYN count in the past window */
 
+    // if rate went up -> check if not active (already starting)
     if (rate >= SYN_THRESHOLD) {
         g_det.last_above = now;
 
-        if (!g_det.attack_active) {
+        if (!g_det.attack_active) { // not active - only starting
             /* === ATTACK START === */
             g_det.attack_active     = 1;
             g_det.attack_start_time = g_det.window_start;
@@ -155,14 +158,15 @@ static void evaluate_window(void)
                 g_det.sources[i].flagged = 1;
             }
         }
-    } else if (g_det.attack_active) {
+
+    } else if (g_det.attack_active) { // if alredy active and the rate < threshold 
         /* Rate is below threshold — check cooldown */
-        if (difftime(now, g_det.last_above) >= COOLDOWN_SEC) {
+        if (difftime(now, g_det.last_above) >= COOLDOWN_SEC) { // check if cooldown time is up
             print_time();
             printf("*** ATTACK ENDED — SYN flood stopped "
                    "(below threshold for %d s) ***\n", COOLDOWN_SEC);
             g_det.attack_active = 0;
-        } else {
+        } else {    // rate only dropped
             print_time();
             printf("    Rate dropped (%u SYN/s), cooldown...\n", rate);
         }
@@ -183,36 +187,42 @@ static void packet_handler(u_char *user,
 {
     (void)user;
 
-    /* Need at least Ethernet + minimal IP header */
+    /* Need at least Ethernet + minimal IP header check, so no reading outside of the buffer */
     if (header->caplen < sizeof(struct ether_header) + sizeof(struct iphdr)) {
         return;
     }
 
+    // get the eth packet 
     const struct ether_header *eth = (const struct ether_header *)packet;
+    // check for packet's eth type == IP
     if (ntohs(eth->ether_type) != ETHERTYPE_IP) {
         return;
     }
 
+    // ge the ipv4 packet
     const struct iphdr *iph = (const struct iphdr *)(packet + sizeof(struct ether_header));
 
-    /* Validate IP header length */
+    // Validate IP header length 
     unsigned ip_hdr_len = (unsigned)iph->ihl * 4;
     if (ip_hdr_len < 20 || iph->protocol != IPPROTO_TCP) {
         return;
     }
 
-    /* Bounds check for TCP header */
+    // Bounds check for TCP header 
     if (header->caplen < sizeof(struct ether_header) + ip_hdr_len + sizeof(struct tcphdr)) {
         return;
     }
 
+    // get tcp packet
     const struct tcphdr *tcph =
         (const struct tcphdr *)(packet + sizeof(struct ether_header) + ip_hdr_len);
 
-    /* We only care about SYN packets (SYN=1, ACK=0) */
+    // We only care about SYN packets (SYN=1, ACK=0) 
     if (tcph->syn && !tcph->ack) {
         g_det.syn_count++;
+        // record the source of the packet in the hash table
         record_source(iph->saddr);
+        // after every processed tcp packet evaluate the window for new connections
         evaluate_window();
     }
 }
@@ -232,6 +242,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
+    // register interface from args
     const char *iface = argv[1];
     char errbuf[PCAP_ERRBUF_SIZE];
 
@@ -249,12 +260,14 @@ int main(int argc, char *argv[])
         pcap_close(handle);
         return EXIT_FAILURE;
     }
+    // set compiled filter for the handle
     if (pcap_setfilter(handle, &fp) < 0) {
         fprintf(stderr, "pcap_setfilter: %s\n", pcap_geterr(handle));
         pcap_freecode(&fp);
         pcap_close(handle);
         return EXIT_FAILURE;
     }
+    // free
     pcap_freecode(&fp);
 
     /* Init detector state */
@@ -271,6 +284,7 @@ int main(int argc, char *argv[])
 
     /* Main capture loop */
     while (g_running) {
+        // read up to 64 packets returns positive if >1 packet catched
         int ret = pcap_dispatch(handle, 64, packet_handler, NULL);
         if (ret < 0) {
             if (ret == PCAP_ERROR_BREAK) break;
