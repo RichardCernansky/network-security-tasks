@@ -170,6 +170,8 @@ static void packet_handler(u_char *user,
     const struct iphdr *iph =
         (const struct iphdr *)(packet + sizeof(struct ether_header));
 
+    
+    // Validate IP header length 
     unsigned ip_hdr_len = (unsigned)iph->ihl * 4;
     if (ip_hdr_len < 20) return;
 
@@ -184,16 +186,18 @@ static void packet_handler(u_char *user,
      */
     if (iph->protocol != IPPROTO_ICMP) return;
 
-    uint16_t total_len   = ntohs(iph->tot_len);
-    uint16_t frag_off_field = ntohs(iph->frag_off);
-    uint16_t offset      = (frag_off_field & IP_OFFMASK) * 8; /* byte offset */
-    int      more_frags  = (frag_off_field & IP_MF) != 0;
+    // get the values from ipv4 in proper ordering for CPU
+    uint16_t total_len   = ntohs(iph->tot_len); // Total length of this particular fragment (IP header + payload)
+    uint16_t frag_off_field = ntohs(iph->frag_off); // 3 bits of flags and 13 bits of fragment offset
+    uint16_t offset      = (frag_off_field & IP_OFFMASK) * 8; // Extract the 13-bit offset using the mask. Multiply by 8 because offsets are stored in units of 8 bytes
+    int      more_frags  = (frag_off_field & IP_MF) != 0; // 'more fragments coming' flag
 
     /* Payload bytes in this particular fragment */
     uint32_t payload_len = 0;
     if (total_len > ip_hdr_len) {
         payload_len = total_len - ip_hdr_len;
     }
+
 
     /*
      * For fragment reassembly size estimation:
@@ -207,12 +211,12 @@ static void packet_handler(u_char *user,
                                    ntohs(iph->id), now);
     if (!grp) return;
 
-    /* Update estimated reassembled size (max of all fragment ends) */
+    /* Update estimated reassembled size only if bigger (max of all fragment ends) */
     if (frag_end > grp->total_bytes) {
         grp->total_bytes = frag_end;
     }
 
-    /* Check threshold */
+    /* Check threshold and detect POD attack */
     if (grp->total_bytes >= POD_SIZE_THRESHOLD && !grp->alerted) {
         grp->alerted = 1;
 
