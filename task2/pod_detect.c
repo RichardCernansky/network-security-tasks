@@ -36,7 +36,7 @@
  */
 #define POD_SIZE_THRESHOLD  10000
 
-#define COOLDOWN_SEC        5       /* Seconds without alert to declare end */
+#define COOLDOWN_SEC        3       /* Seconds without alert to declare end */
 #define MAX_TRACKED_IDS     2048    /* Fragment-group hash table size       */
 
 /* Global state */
@@ -147,6 +147,7 @@ static void check_cooldown(void)
         printf("*** ATTACK ENDED — no oversized ICMP for %d s ***\n",
                COOLDOWN_SEC);
         g_det.attack_active = 0;
+        memset(g_det.groups, 0, sizeof(g_det.groups));
     }
 }
 
@@ -308,6 +309,7 @@ int main(int argc, char *argv[])
             fprintf(stderr, "pcap_dispatch: %s\n", pcap_geterr(handle));
             break;
         }
+        // when the packets stop coming the packet handler does not get called -> check_cooldown itself
         check_cooldown();
     }
 
