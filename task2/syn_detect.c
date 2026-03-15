@@ -119,7 +119,7 @@ static void evaluate_window(void)
 {
     time_t now = time(NULL);
 
-    // Still inside the same 1-second window -> return
+    // window size of 1 sec: if still inside the same 1-second window -> return
     if (difftime(now, g_det.window_start) < WINDOW_SEC) {
         return;
     }
@@ -166,7 +166,6 @@ static void evaluate_window(void)
             printf("*** ATTACK ENDED — SYN flood stopped "
                    "(below threshold for %d s) ***\n", COOLDOWN_SEC);
             g_det.attack_active = 0;
-            g_running = 0; 
         } else {    // rate only dropped
             print_time();
             printf("    Rate dropped (%u SYN/s), cooldown...\n", rate);

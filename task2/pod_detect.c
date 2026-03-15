@@ -14,8 +14,6 @@
  *   is suspicious.  The classic Ping of Death exceeds 65535 bytes.
  *   We use a conservative threshold of 10000 bytes — this passes all
  *   normal traffic while catching the Assignment 3 attack easily.
- *
- * Must be run as root.
  */
 
 #include <stdio.h>
@@ -33,13 +31,6 @@
 
 /*
  * ICMP reassembled-size threshold (bytes).
- *
- * Rationale:
- *   - Standard ping: 64 bytes payload  (passes)
- *   - Jumbo ping:    1472 bytes payload (passes — single frame, no fragments)
- *   - Path MTU test: up to ~9000 bytes  (passes on jumbo-frame networks)
- *   - PoD attack:    65535+ bytes        (DETECTED)
- *
  * 10 000 bytes is well above any legitimate single ICMP exchange
  * yet far below the 65535-byte PoD boundary, giving a safety margin.
  */
@@ -48,7 +39,7 @@
 #define COOLDOWN_SEC        5       /* Seconds without alert to declare end */
 #define MAX_TRACKED_IDS     2048    /* Fragment-group hash table size       */
 
-/* ---------- Global state ---------- */
+/* Global state */
 static volatile sig_atomic_t g_running = 1;
 
 /*
@@ -285,6 +276,7 @@ int main(int argc, char *argv[])
     }
 
     /* Filter: only IP (captures ICMP fragments too) */
+    // compile filter and free
     struct bpf_program fp;
     if (pcap_compile(handle, &fp, "ip", 1, PCAP_NETMASK_UNKNOWN) < 0) {
         fprintf(stderr, "pcap_compile: %s\n", pcap_geterr(handle));
