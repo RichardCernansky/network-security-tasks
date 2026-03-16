@@ -64,11 +64,15 @@ typedef struct {
 } detector_t;
 
 static detector_t g_det;
+static pcap_t *g_handle = NULL;
 
 static void sig_handler(int sig)
 {
     (void)sig;
     g_running = 0;
+    if (g_handle) {
+        pcap_breakloop(g_handle);
+    }
 }
 
 /* Hash (src, dst, id) into the table */
@@ -279,6 +283,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "pcap_open_live(%s): %s\n", iface, errbuf);
         return EXIT_FAILURE;
     }
+    g_handle = handle;
 
     /* Filter: only IP (captures ICMP fragments too) */
     // compile filter and free
