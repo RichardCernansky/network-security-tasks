@@ -215,7 +215,7 @@ static void packet_handler(u_char *user,
                                    ntohs(iph->id), now);
     if (!grp) return;
 
-    /* Update estimated reassembled size only if bigger (max of all fragment ends) */
+    /* Update for specific attacker estimated reassembled size only if bigger (max of all fragment ends) */
     if (frag_end > grp->total_bytes) {
         grp->total_bytes = frag_end;
     }

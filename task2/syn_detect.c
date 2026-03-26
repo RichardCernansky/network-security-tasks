@@ -14,7 +14,6 @@
  *   - Track per-source SYN counts to identify sequential (single-source) attacks.
  *   - When rate drops below threshold for a cooldown period, declare attack over.
  *
- * Must be run as root (pcap requires privileges).
  */
 
 #include <stdio.h>
@@ -113,6 +112,7 @@ static void print_time(void)
 }
 
 /*
+Window evaluation runs only after 1 second after window_start -> during the 1s window check how many SYNs accumulated
  * Check the window, detect attacks, and print results.
  * Called after each SYN is counted.
  */
