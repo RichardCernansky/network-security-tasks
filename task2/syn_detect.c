@@ -27,6 +27,7 @@
 #include <netinet/tcp.h>
 #include <net/ethernet.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 /* ---------- Tunable parameters ---------- */
 #define SYN_THRESHOLD       50    /* SYN packets/s to trigger alert    */
@@ -252,6 +253,13 @@ int main(int argc, char *argv[])
         fprintf(stderr, "pcap_open_live(%s): %s\n", iface, errbuf);
         return EXIT_FAILURE;
     }
+    // set non-blocking
+    if (pcap_setnonblock(handle, 1, errbuf) < 0)
+        {
+        fprintf(stderr, "pcap_setnonblock: %s\n", errbuf);
+        pcap_close(handle);
+        return EXIT_FAILURE;
+    }
 
     /* Compile a BPF filter: only TCP packets */
     struct bpf_program fp;
@@ -284,7 +292,6 @@ int main(int argc, char *argv[])
 
     /* Main capture loop */
     while (g_running) {
-        // read up to 64 packets returns positive if >1 packet catched
         int ret = pcap_dispatch(handle, 64, packet_handler, NULL);
         if (ret < 0) {
             if (ret == PCAP_ERROR_BREAK) break;
@@ -292,11 +299,11 @@ int main(int argc, char *argv[])
             break;
         }
 
-        /* Even with no packets, evaluate window to detect attack end */
         evaluate_window();
+        usleep(100000);
     }
 
-    printf("\n[*] Shutting down.\n");
-    pcap_close(handle);
-    return EXIT_SUCCESS;
-}
+        printf("\n[*] Shutting down.\n");
+        pcap_close(handle);
+        return EXIT_SUCCESS;
+    }
