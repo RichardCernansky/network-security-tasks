@@ -283,6 +283,13 @@ int main(int argc, char *argv[])
         fprintf(stderr, "pcap_open_live(%s): %s\n", iface, errbuf);
         return EXIT_FAILURE;
     }
+    // set non-blocking
+    if (pcap_setnonblock(handle, 1, errbuf) < 0)
+        {
+        fprintf(stderr, "pcap_setnonblock: %s\n", errbuf);
+        pcap_close(handle);
+        return EXIT_FAILURE;
+    }
     g_handle = handle;
 
     /* Filter: only IP (captures ICMP fragments too) */
@@ -320,6 +327,7 @@ int main(int argc, char *argv[])
         }
         // when the packets stop coming the packet handler does not get called -> check_cooldown itself
         check_cooldown();
+        usleep(100000);
     }
 
     printf("\n[*] Shutting down.\n");
