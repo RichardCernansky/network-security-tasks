@@ -1,0 +1,39 @@
+WinDbg Commands Summary
+Command
+Purpose
+bp WS2_32!recv
+Set breakpoint at recv function
+
+bp 101011de
+Set breakpoint at strcpy call
+
+g
+Continue execution
+
+p
+Step one instruction
+
+pt
+Step until function returns
+
+r eax / r eip / r ebp
+Display register values
+
+dd esp L2
+Display 2 dwords at ESP (function args)
+
+da <addr>
+Display ASCII string at address
+
+db esp L20
+Display bytes at ESP (verify payload)
+
+bc *
+Clear all breakpoints
+
+lm
+List loaded modules
+s 10100000 1011e000 ff e4
+Search for JMP ESP (FF E4) in module
+
+
