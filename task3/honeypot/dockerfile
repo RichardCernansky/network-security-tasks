@@ -1,0 +1,11 @@
+FROM python:3.11-slim
+
+RUN pip install --no-cache-dir paramiko
+
+RUN mkdir -p /var/log/honeypot /etc/honeypot
+
+COPY honeypot.py /opt/honeypot/honeypot.py
+
+EXPOSE 22
+
+CMD ["python3", "/opt/honeypot/honeypot.py"]
