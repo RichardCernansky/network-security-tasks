@@ -11,9 +11,8 @@ mkdir -p logs
 
 docker run -it --rm \
     --name ssh-honeypot \
-    -p 22:22 \
-    -v "$(pwd)/logs:/var/log/honeypot" \
-    --read-only \
+    -p 443:22 \
+    -v "$(pwd)/logs:/var/log/honeypot:rw" \
     --tmpfs /tmp:size=10M \
     --tmpfs /etc/honeypot:size=1M \
     --memory=128m \

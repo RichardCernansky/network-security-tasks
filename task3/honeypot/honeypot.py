@@ -14,22 +14,16 @@ import os
 import sys
 import hashlib
 
-# ============================================================
 # Configuration
-# ============================================================
-
 HOST = "0.0.0.0"
 PORT = 22
 LOG_FILE = "/var/log/honeypot/honeypot.json"
 HOST_KEY_FILE = "/etc/honeypot/ssh_host_rsa_key"
-MAX_AUTH_ATTEMPTS = 4  # let attacker in after this many tries
+MAX_AUTH_ATTEMPTS = 3  # let attacker in after this many tries
 FAKE_HOSTNAME = "prod-db-01"
 FAKE_USER = "admin"
 
-# ============================================================
 # Logging
-# ============================================================
-
 log_lock = threading.Lock()
 
 def log_event(event_type, client_ip, **kwargs):
@@ -46,10 +40,7 @@ def log_event(event_type, client_ip, **kwargs):
         with open(LOG_FILE, "a") as f:
             f.write(json.dumps(entry) + "\n")
 
-# ============================================================
 # Fake filesystem
-# ============================================================
-
 FAKE_FS = {
     "/": ["bin", "etc", "home", "root", "tmp", "var", "usr", "opt"],
     "/etc": ["passwd", "shadow", "hostname", "ssh", "crontab", "resolv.conf"],
@@ -196,9 +187,7 @@ FAKE_FILES = {
     ),
 }
 
-# ============================================================
 # Fake shell - command handlers
-# ============================================================
 
 class FakeShell:
     def __init__(self, client_ip, username):
@@ -597,9 +586,7 @@ class FakeShell:
         return "bash: nmap: command not found\n"
 
 
-# ============================================================
 # SSH server implementation
-# ============================================================
 
 class HoneypotSSHServer(paramiko.ServerInterface):
     def __init__(self, client_ip):
@@ -742,9 +729,7 @@ def handle_client(client_socket, client_addr):
             pass
 
 
-# ============================================================
 # Main
-# ============================================================
 
 def main():
     # generate host key if it doesn't exist

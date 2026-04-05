@@ -1,0 +1,40 @@
+{"timestamp": "2026-04-04T21:07:56.863112Z", "event": "connection", "source_ip": "172.17.0.1:44516"}
+{"timestamp": "2026-04-04T21:08:07.163608Z", "event": "login_attempt", "source_ip": "172.17.0.1:44516", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-04T21:08:08.999030Z", "event": "login_attempt", "source_ip": "172.17.0.1:44516", "username": "admin", "password": "admin", "attempt": 2}
+{"timestamp": "2026-04-04T21:08:10.259210Z", "event": "login_attempt", "source_ip": "172.17.0.1:44516", "username": "admin", "password": "admin", "attempt": 3}
+{"timestamp": "2026-04-04T21:08:10.264484Z", "event": "channel_failed", "source_ip": "172.17.0.1:44516"}
+{"timestamp": "2026-04-04T21:08:10.265421Z", "event": "disconnect", "source_ip": "172.17.0.1:44516"}
+{"timestamp": "2026-04-04T21:08:24.731603Z", "event": "connection", "source_ip": "172.17.0.1:56682"}
+{"timestamp": "2026-04-04T21:08:27.820100Z", "event": "login_attempt", "source_ip": "172.17.0.1:56682", "username": "admin", "password": "adfklj", "attempt": 1}
+{"timestamp": "2026-04-04T21:08:29.739777Z", "event": "login_attempt", "source_ip": "172.17.0.1:56682", "username": "admin", "password": "admin", "attempt": 2}
+{"timestamp": "2026-04-04T21:08:30.907199Z", "event": "login_attempt", "source_ip": "172.17.0.1:56682", "username": "admin", "password": "preco", "attempt": 3}
+{"timestamp": "2026-04-04T21:08:30.912774Z", "event": "channel_failed", "source_ip": "172.17.0.1:56682"}
+{"timestamp": "2026-04-04T21:08:30.913765Z", "event": "disconnect", "source_ip": "172.17.0.1:56682"}
+{"timestamp": "2026-04-04T21:09:43.726540Z", "event": "connection", "source_ip": "172.17.0.1:44322"}
+{"timestamp": "2026-04-04T21:09:45.791146Z", "event": "login_attempt", "source_ip": "172.17.0.1:44322", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-04T21:09:47.498683Z", "event": "login_attempt", "source_ip": "172.17.0.1:44322", "username": "admin", "password": "hello", "attempt": 2}
+{"timestamp": "2026-04-04T21:09:48.564088Z", "event": "login_attempt", "source_ip": "172.17.0.1:44322", "username": "admin", "password": "how", "attempt": 3}
+{"timestamp": "2026-04-04T21:09:48.570528Z", "event": "channel_failed", "source_ip": "172.17.0.1:44322"}
+{"timestamp": "2026-04-04T21:09:48.570975Z", "event": "disconnect", "source_ip": "172.17.0.1:44322"}
+{"timestamp": "2026-04-04T21:10:06.173921Z", "event": "connection", "source_ip": "172.17.0.1:59560"}
+{"timestamp": "2026-04-04T21:10:06.232872Z", "event": "error", "source_ip": "172.17.0.1:59560", "error": ""}
+{"timestamp": "2026-04-04T21:10:06.233062Z", "event": "disconnect", "source_ip": "172.17.0.1:59560"}
+{"timestamp": "2026-04-04T21:10:14.850087Z", "event": "connection", "source_ip": "172.17.0.1:34944"}
+{"timestamp": "2026-04-04T21:10:14.933858Z", "event": "error", "source_ip": "172.17.0.1:34944", "error": ""}
+{"timestamp": "2026-04-04T21:10:14.934173Z", "event": "disconnect", "source_ip": "172.17.0.1:34944"}
+{"timestamp": "2026-04-04T21:11:14.547479Z", "event": "connection", "source_ip": "172.17.0.1:48958"}
+{"timestamp": "2026-04-04T21:11:18.392545Z", "event": "login_attempt", "source_ip": "172.17.0.1:48958", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-04T21:11:19.520510Z", "event": "login_attempt", "source_ip": "172.17.0.1:48958", "username": "admin", "password": "dafjkl", "attempt": 2}
+{"timestamp": "2026-04-04T21:11:20.770994Z", "event": "login_attempt", "source_ip": "172.17.0.1:48958", "username": "admin", "password": "hello", "attempt": 3}
+{"timestamp": "2026-04-04T21:11:20.771377Z", "event": "login_success", "source_ip": "172.17.0.1:48958", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-04T21:11:27.683212Z", "event": "logout", "source_ip": "172.17.0.1:48958"}
+{"timestamp": "2026-04-04T21:11:27.684576Z", "event": "disconnect", "source_ip": "172.17.0.1:48958"}
+{"timestamp": "2026-04-04T21:16:19.656187Z", "event": "connection", "source_ip": "172.17.0.1:45140"}
+{"timestamp": "2026-04-04T21:16:22.447055Z", "event": "login_attempt", "source_ip": "172.17.0.1:45140", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-04T21:16:23.821106Z", "event": "login_attempt", "source_ip": "172.17.0.1:45140", "username": "admin", "password": "hello", "attempt": 2}
+{"timestamp": "2026-04-04T21:16:24.892450Z", "event": "login_attempt", "source_ip": "172.17.0.1:45140", "username": "admin", "password": "again", "attempt": 3}
+{"timestamp": "2026-04-04T21:16:24.893790Z", "event": "login_success", "source_ip": "172.17.0.1:45140", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-04T21:16:28.170900Z", "event": "command", "source_ip": "172.17.0.1:45140", "username": "admin", "command": "wget"}
+{"timestamp": "2026-04-04T21:16:28.171445Z", "event": "download_attempt", "source_ip": "172.17.0.1:45140", "command": "wget "}
+{"timestamp": "2026-04-04T21:21:03.863503Z", "event": "logout", "source_ip": "172.17.0.1:45140"}
+{"timestamp": "2026-04-04T21:21:03.885680Z", "event": "disconnect", "source_ip": "172.17.0.1:45140"}
