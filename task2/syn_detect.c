@@ -36,7 +36,7 @@
 #define MAX_TRACKED_SRCS    4096   /* Hash table size for source IPs    */
 
 /* ---------- Global state ---------- */
-static volatile sig_atomic_t g_running = 1;
+static volatile sig_atomic_t running = 1;
 
 /* Per-source tracking entry */
 typedef struct {
@@ -60,7 +60,7 @@ static detector_t g_det;
 static void sig_handler(int sig)
 {
     (void)sig;
-    g_running = 0;
+    running = 0;
 }
 
 /* hash for IPv4 addresses */
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
     printf("[*] Press Ctrl+C to stop.\n\n");
 
     /* Main capture loop */
-    while (g_running) {
+    while (running) {
         int ret = pcap_dispatch(handle, 64, packet_handler, NULL);
         if (ret < 0) {
             if (ret == PCAP_ERROR_BREAK) break;

