@@ -32,9 +32,22 @@ sudo tcpdump -i enp0s1 'tcp port 80' -c 20
 sudo python3 pod.py 192.168.128.2 66000
 sudo ./pod_detect enp0s1
 
+T1
+should it write all the ports states out or only the open ones?
+should i register rst alone?
+
+T2
 can be the tcp_syncookies set to 0 on debian side and RST DROP on kali so i can see the effect?
 source ip for syn flood should be real as for demonstrating sequential attack? 
 default dst, src port of syn flood?
-default size of packet for pod?
+# default size of packet for pod?
 how to detect pod attack because there is no info about assignment 4 ?
 detect early or on the last packet?
+
+T3
+what does the honeypot mean? does it have to run native docker shell or custom?
+do we have to crate the videos and submit the code too?
+honeypot and hardening script points in the courses valid?
+
+
+T4

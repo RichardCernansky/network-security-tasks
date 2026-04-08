@@ -15,7 +15,7 @@ import sys
 import hashlib
 
 # Configuration
-HOST = "0.0.0.0"
+HOST = "0.0.0.0" # host all
 PORT = 22
 LOG_FILE = "/var/log/honeypot/honeypot.json"
 HOST_KEY_FILE = "/etc/honeypot/ssh_host_rsa_key"
@@ -186,8 +186,6 @@ FAKE_FILES = {
         "ufw enable\n"
     ),
 }
-
-# Fake shell - command handlers
 
 class FakeShell:
     def __init__(self, client_ip, username):
@@ -587,7 +585,6 @@ class FakeShell:
 
 
 # SSH server implementation
-
 class HoneypotSSHServer(paramiko.ServerInterface):
     def __init__(self, client_ip):
         self.client_ip = client_ip
@@ -672,7 +669,8 @@ def handle_client(client_socket, client_addr):
             f"\n"
             f"Last login: {(datetime.datetime.utcnow() - datetime.timedelta(hours=3)).strftime('%a %b %d %H:%M:%S %Y')} from 10.0.1.1\n"
         )
-        channel.sendall(motd.encode())
+        # channel.sendall(motd.encode())
+        channel.sendall(motd.replace("\n", "\r\n").encode())
         channel.sendall(shell.get_prompt().encode())
 
         # command loop
@@ -730,7 +728,6 @@ def handle_client(client_socket, client_addr):
 
 
 # Main
-
 def main():
     # generate host key if it doesn't exist
     os.makedirs(os.path.dirname(HOST_KEY_FILE), exist_ok=True)
@@ -753,6 +750,7 @@ def main():
 
     while True:
         try:
+            # try spawning new thread for new connections - multiple attackers at once
             client_socket, client_addr = server_socket.accept()
             print(f"[+] Connection from {client_addr[0]}:{client_addr[1]}")
             t = threading.Thread(target=handle_client, args=(client_socket, client_addr))

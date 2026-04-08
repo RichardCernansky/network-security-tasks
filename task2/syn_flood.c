@@ -103,7 +103,7 @@ unsigned short calculate_tcp_checksum(struct ipheader *ip)
     return (unsigned short)in_cksum((unsigned short *)&p_tcp, tcp_len + 12);
 }
 
-/* Send raw IP packet - matches lab PDF */
+/* Send raw IP packet from lab PDF */
 void send_raw_ip_packet(struct ipheader *ip)
 {
     struct sockaddr_in dest_info;

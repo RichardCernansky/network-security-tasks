@@ -42,7 +42,7 @@ static volatile sig_atomic_t g_running = 1;
 typedef struct {
     uint32_t ip;
     unsigned count;
-    int      flagged;   /* Already reported as sequential? */
+    int      flagged;   /* Is already reported as sequential? */
 } src_entry_t;
 
 /* Detector state */
@@ -63,7 +63,7 @@ static void sig_handler(int sig)
     g_running = 0;
 }
 
-/* Simple hash for IPv4 addresses */
+/* hash for IPv4 addresses */
 static unsigned ip_hash(uint32_t ip)
 {
     return (ip ^ (ip >> 16)) % MAX_TRACKED_SRCS;
@@ -74,7 +74,7 @@ static src_entry_t *record_source(uint32_t ip)
 {
     unsigned idx = ip_hash(ip);
 
-    /* Linear probing (table is large enough for burst tracking) */
+    /* Linear probing  */
     for (unsigned i = 0; i < MAX_TRACKED_SRCS; i++) {
         unsigned slot = (idx + i) % MAX_TRACKED_SRCS;
         // matched the ip
@@ -133,12 +133,12 @@ static void evaluate_window(void)
         g_det.last_above = now;
 
         if (!g_det.attack_active) { // not active - only starting
-            /* === ATTACK START === */
+            /* attack started */
             g_det.attack_active     = 1;
             g_det.attack_start_time = g_det.window_start;
 
             print_time();
-            printf("*** ATTACK DETECTED — SYN flood started "
+            printf("ATTACK DETECTED — SYN flood started "
                    "(rate: %u SYN/s, threshold: %d) ***\n", rate, SYN_THRESHOLD);
         } else {
             print_time();

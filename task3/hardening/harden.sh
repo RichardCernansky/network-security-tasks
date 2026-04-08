@@ -174,8 +174,6 @@ All activity is monitored and logged.
 *************************************************************
 EOF
 
-
-
 # restrictive umask: new files default to 640, dirs to 750
 # put to both so cover all types of sessions
 echo "umask 027" >> /etc/profile
@@ -192,8 +190,7 @@ chmod 644 /etc/passwd  2>/dev/null || true # user IDs
 chmod 644 /etc/group   2>/dev/null || true
 chmod 700 /root        2>/dev/null || true
 
-# 5. SYSTEM RESOURCES - prevent abuse and DoS
-# I just put there some numbers dont judge, at least i thought about it
+# 5. SYSTEM RESOURCES - prevent abuse and Denial of Service
 
 cat > /etc/security/limits.d/99-hardening.conf << 'EOF'
 # cap process count per user - prevents fork bombs
@@ -204,14 +201,19 @@ root hard    nproc     512
 *    hard    nofile    4096
 root hard    nofile    65535
 
-# disable core dumps for all users - no sensitive memory dumps on disk
-*    hard    core      0
-
 # cap virtual memory per user (512MB in KB) - prevents memory exhaustion
 *    hard    as        524288
 
 # max CPU time per process (60 minutes) - kills runaway processes
 *    hard    cpu       60
+EOF
+
+mkdir -p /etc/systemd/system/user.slice.d/limits.conf
+cat > /etc/systemd/system/user.slice.d/limits.conf  << 'EOF' 
+[Slice]
+CPUQuota=50%
+MemoryMax=2G
+TasksMax=512
 EOF
 
 # limit nginx via systemd cgroup (applied at service level, not per user)
@@ -237,45 +239,3 @@ EOF
 # reload to load the config files
 systemctl daemon-reload 2>/dev/null || true
 
-# 6. ULTIMATE HACK - ONE-COMMAND security audit
-# install a quick audit script that dumps the most useful security state at a glance
-cat > /usr/local/bin/security-audit << 'AUDIT'
-#!/bin/bash
-echo "=== SECURITY AUDIT REPORT - $(date) ==="
-
-echo -e "\n--- LISTENING PORTS ---"
-ss -tlnp 2>/dev/null || netstat -tlnp
-
-echo -e "\n--- FAILED SSH LOGINS (last 24h) ---"
-journalctl -u ssh --since "24 hours ago" 2>/dev/null | grep -i "failed" | tail -20
-
-echo -e "\n--- USERS WITH LOGIN SHELLS ---"
-grep -v "nologin\|false\|sync\|halt\|shutdown" /etc/passwd
-
-echo -e "\n--- SUID BINARIES (privesc candidates) ---"
-find / -perm -4000 -type f 2>/dev/null | head -20
-
-echo -e "\n--- WORLD-WRITABLE FILES ---"
-find / -xdev -perm -o+w -type f 2>/dev/null | head -20
-
-echo -e "\n--- FIREWALL RULES ---"
-iptables -L -n --line-numbers 2>/dev/null
-
-echo -e "\n--- KEY KERNEL SETTINGS ---"
-sysctl net.ipv4.ip_forward net.ipv6.conf.all.disable_ipv6 kernel.randomize_va_space net.ipv4.tcp_syncookies 2>/dev/null
-
-echo -e "\n--- TOP CPU PROCESSES ---"
-ps aux --sort=-%cpu | head -10
-
-echo -e "\n--- TOP MEMORY PROCESSES ---"
-ps aux --sort=-%mem | head -10
-
-echo -e "\n--- DISK USAGE ---"
-df -h | grep -v tmpfs
-
-echo -e "\n=== END OF AUDIT ==="
-AUDIT
-
-chmod +x /usr/local/bin/security-audit
-
-echo "Done. Run 'security-audit' for a quick security status check. Reboot recommended."

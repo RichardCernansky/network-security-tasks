@@ -93,13 +93,6 @@ def get_service_name(port: int, banner: str) -> str:
 
 
 def scan_syn(target: str, port: int) -> str:
-    """
-    TCP SYN scan (half-open scan).
-    Sends a SYN packet and checks the response without completing the handshake.
-    open     = SYN-ACK received (port is listening)
-    closed   = RST received (port is not listening)
-    filtered = no response (firewall is blocking)
-    """
     pkt = IP(dst=target) / TCP(dport=port, flags="S")
     resp = sr1(pkt, timeout=1)
 
@@ -111,19 +104,13 @@ def scan_syn(target: str, port: int) -> str:
             rst = IP(dst=target) / TCP(dport=port, flags="R", seq=resp[TCP].ack)
             sr1(rst, timeout=1)
             return "open"
-        elif resp[TCP].flags == 0x04:  # RST-ACK, RST
+            
+        elif resp[TCP].flags & 0x04: # Check if the RST flag is set
             return "closed"
     return "filtered"
 
 
 def scan_connect(target: str, port: int) -> str:
-    """
-    TCP Connect scan.
-    Completes the full three-way handshake using the OS socket.
-    Slower and more detectable than SYN scan but does not need raw socket privileges.
-    open   = connection succeeded
-    closed = connection refused
-    """
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(1)

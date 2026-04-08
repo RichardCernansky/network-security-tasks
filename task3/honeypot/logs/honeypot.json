@@ -38,3 +38,126 @@
 {"timestamp": "2026-04-04T21:16:28.171445Z", "event": "download_attempt", "source_ip": "172.17.0.1:45140", "command": "wget "}
 {"timestamp": "2026-04-04T21:21:03.863503Z", "event": "logout", "source_ip": "172.17.0.1:45140"}
 {"timestamp": "2026-04-04T21:21:03.885680Z", "event": "disconnect", "source_ip": "172.17.0.1:45140"}
+{"timestamp": "2026-04-07T21:18:49.452598Z", "event": "connection", "source_ip": "172.17.0.1:41546"}
+{"timestamp": "2026-04-07T21:18:49.790103Z", "event": "error", "source_ip": "172.17.0.1:41546", "error": ""}
+{"timestamp": "2026-04-07T21:18:49.790843Z", "event": "disconnect", "source_ip": "172.17.0.1:41546"}
+{"timestamp": "2026-04-07T21:19:28.230624Z", "event": "connection", "source_ip": "172.17.0.1:55856"}
+{"timestamp": "2026-04-07T21:19:34.227064Z", "event": "login_attempt", "source_ip": "172.17.0.1:55856", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-07T21:19:37.140728Z", "event": "login_attempt", "source_ip": "172.17.0.1:55856", "username": "admin", "password": "password", "attempt": 2}
+{"timestamp": "2026-04-07T21:19:38.742080Z", "event": "login_attempt", "source_ip": "172.17.0.1:55856", "username": "admin", "password": "pss", "attempt": 3}
+{"timestamp": "2026-04-07T21:19:38.746536Z", "event": "login_success", "source_ip": "172.17.0.1:55856", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-07T21:19:48.028586Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-07T21:19:57.638646Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "cat notes.txt"}
+{"timestamp": "2026-04-07T21:20:05.967433Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-07T21:20:11.126762Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "cat backup.sh"}
+{"timestamp": "2026-04-07T21:20:13.951546Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "cd ."}
+{"timestamp": "2026-04-07T21:20:15.067705Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "cd .."}
+{"timestamp": "2026-04-07T21:20:15.907559Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-07T21:20:18.687999Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "cd .."}
+{"timestamp": "2026-04-07T21:20:19.123783Z", "event": "command", "source_ip": "172.17.0.1:55856", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-07T21:39:31.057224Z", "event": "connection", "source_ip": "172.17.0.1:43032"}
+{"timestamp": "2026-04-07T21:39:35.953082Z", "event": "login_attempt", "source_ip": "172.17.0.1:43032", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-07T21:39:37.426519Z", "event": "login_attempt", "source_ip": "172.17.0.1:43032", "username": "admin", "password": "ddd", "attempt": 2}
+{"timestamp": "2026-04-07T21:39:38.577214Z", "event": "login_attempt", "source_ip": "172.17.0.1:43032", "username": "admin", "password": "admi", "attempt": 3}
+{"timestamp": "2026-04-07T21:39:38.589540Z", "event": "login_success", "source_ip": "172.17.0.1:43032", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-07T21:39:46.754573Z", "event": "command", "source_ip": "172.17.0.1:43032", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-07T22:41:41.637819Z", "event": "connection", "source_ip": "192.168.128.2:57948"}
+{"timestamp": "2026-04-07T22:41:47.857745Z", "event": "login_attempt", "source_ip": "192.168.128.2:57948", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-07T22:41:49.443621Z", "event": "login_attempt", "source_ip": "192.168.128.2:57948", "username": "admin", "password": "admin", "attempt": 2}
+{"timestamp": "2026-04-07T22:41:50.873349Z", "event": "login_attempt", "source_ip": "192.168.128.2:57948", "username": "admin", "password": "dd", "attempt": 3}
+{"timestamp": "2026-04-07T22:41:50.874125Z", "event": "login_success", "source_ip": "192.168.128.2:57948", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-07T22:45:09.750047Z", "event": "command", "source_ip": "192.168.128.2:57948", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:04:41.296086Z", "event": "connection", "source_ip": "192.168.128.2:57950"}
+{"timestamp": "2026-04-08T09:04:41.422449Z", "event": "error", "source_ip": "192.168.128.2:57950", "error": ""}
+{"timestamp": "2026-04-08T09:04:41.422736Z", "event": "disconnect", "source_ip": "192.168.128.2:57950"}
+{"timestamp": "2026-04-08T09:08:15.060333Z", "event": "connection", "source_ip": "192.168.128.2:57952"}
+{"timestamp": "2026-04-08T09:08:23.087239Z", "event": "error", "source_ip": "192.168.128.2:57952", "error": "[Errno 104] Connection reset by peer"}
+{"timestamp": "2026-04-08T09:08:23.093190Z", "event": "disconnect", "source_ip": "192.168.128.2:57952"}
+{"timestamp": "2026-04-08T09:10:38.268373Z", "event": "connection", "source_ip": "192.168.128.2:57954"}
+{"timestamp": "2026-04-08T09:10:46.040135Z", "event": "login_attempt", "source_ip": "192.168.128.2:57954", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-08T09:10:48.746479Z", "event": "login_attempt", "source_ip": "192.168.128.2:57954", "username": "admin", "password": "hello", "attempt": 2}
+{"timestamp": "2026-04-08T09:10:50.743060Z", "event": "login_attempt", "source_ip": "192.168.128.2:57954", "username": "admin", "password": "world", "attempt": 3}
+{"timestamp": "2026-04-08T09:10:50.743682Z", "event": "login_success", "source_ip": "192.168.128.2:57954", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-08T09:13:12.808285Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:13:25.223451Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:13:38.205701Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "whoam i"}
+{"timestamp": "2026-04-08T09:13:41.379318Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:14:09.299273Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "\u001b[A\u001b[B\u001b[B"}
+{"timestamp": "2026-04-08T09:14:14.544192Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "clear"}
+{"timestamp": "2026-04-08T09:14:24.218604Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:14:31.185813Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:14:43.840414Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "clear"}
+{"timestamp": "2026-04-08T09:14:46.136249Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:14:48.345302Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:14:57.610101Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "cat pwords.txt"}
+{"timestamp": "2026-04-08T09:15:09.398714Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "\u001b[A"}
+{"timestamp": "2026-04-08T09:15:12.083567Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "clear"}
+{"timestamp": "2026-04-08T09:15:13.858744Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:15:14.457518Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:15:30.379502Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "\u001b[A\u001b[B\u001bOc\u001bcat passwords.txt"}
+{"timestamp": "2026-04-08T09:15:38.613848Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "clear"}
+{"timestamp": "2026-04-08T09:15:41.654418Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:15:57.192117Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:16:00.100691Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:16:15.713864Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "cat etc/shadow\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D/"}
+{"timestamp": "2026-04-08T09:16:35.410378Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "\u001b[A\u001b[A\u001b[B\u001b[Bcat /etc/shadow"}
+{"timestamp": "2026-04-08T09:16:43.684398Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:16:43.689319Z", "event": "sudo_attempt", "source_ip": "192.168.128.2:57954", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:16:43.689817Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "su"}
+{"timestamp": "2026-04-08T09:16:43.690180Z", "event": "su_attempt", "source_ip": "192.168.128.2:57954", "username": "root"}
+{"timestamp": "2026-04-08T09:16:51.313132Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "ps"}
+{"timestamp": "2026-04-08T09:16:54.245952Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "netstat"}
+{"timestamp": "2026-04-08T09:18:11.848612Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "clear"}
+{"timestamp": "2026-04-08T09:18:13.189474Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "ls"}
+{"timestamp": "2026-04-08T09:18:14.993923Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "whoami"}
+{"timestamp": "2026-04-08T09:18:23.026444Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:18:23.031454Z", "event": "sudo_attempt", "source_ip": "192.168.128.2:57954", "username": "root", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:18:23.031975Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "su"}
+{"timestamp": "2026-04-08T09:18:23.032355Z", "event": "su_attempt", "source_ip": "192.168.128.2:57954", "username": "root"}
+{"timestamp": "2026-04-08T09:18:36.096811Z", "event": "command", "source_ip": "192.168.128.2:57954", "username": "root", "command": "chuser admin"}
+{"timestamp": "2026-04-08T09:18:50.203292Z", "event": "logout", "source_ip": "192.168.128.2:57954"}
+{"timestamp": "2026-04-08T09:18:50.208078Z", "event": "disconnect", "source_ip": "192.168.128.2:57954"}
+{"timestamp": "2026-04-08T09:19:18.966809Z", "event": "connection", "source_ip": "192.168.128.2:57956"}
+{"timestamp": "2026-04-08T09:19:24.865516Z", "event": "login_attempt", "source_ip": "192.168.128.2:57956", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-08T09:19:25.976732Z", "event": "login_attempt", "source_ip": "192.168.128.2:57956", "username": "admin", "password": "hello", "attempt": 2}
+{"timestamp": "2026-04-08T09:19:27.597597Z", "event": "login_attempt", "source_ip": "192.168.128.2:57956", "username": "admin", "password": "again", "attempt": 3}
+{"timestamp": "2026-04-08T09:19:27.598390Z", "event": "login_success", "source_ip": "192.168.128.2:57956", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-08T09:19:33.227737Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "clear"}
+{"timestamp": "2026-04-08T09:19:42.250637Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:19:42.885080Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:19:48.046850Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "ps"}
+{"timestamp": "2026-04-08T09:19:53.803881Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "netstat"}
+{"timestamp": "2026-04-08T09:19:58.977735Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:19:58.978602Z", "event": "sudo_attempt", "source_ip": "192.168.128.2:57956", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:19:58.978970Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "root", "command": "su"}
+{"timestamp": "2026-04-08T09:19:58.979248Z", "event": "su_attempt", "source_ip": "192.168.128.2:57956", "username": "root"}
+{"timestamp": "2026-04-08T09:20:13.680160Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "root", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:20:32.751206Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "root", "command": "cat etc/shadow\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C/"}
+{"timestamp": "2026-04-08T09:20:39.602799Z", "event": "command", "source_ip": "192.168.128.2:57956", "username": "root", "command": "\u001b[A\u001b[D\u001b[C\u001b[Bcat /etc/shadow"}
+{"timestamp": "2026-04-08T09:20:53.512943Z", "event": "logout", "source_ip": "192.168.128.2:57956"}
+{"timestamp": "2026-04-08T09:20:53.517464Z", "event": "disconnect", "source_ip": "192.168.128.2:57956"}
+{"timestamp": "2026-04-08T09:21:40.704407Z", "event": "connection", "source_ip": "192.168.128.2:57958"}
+{"timestamp": "2026-04-08T09:21:46.325300Z", "event": "login_attempt", "source_ip": "192.168.128.2:57958", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-08T09:21:47.711599Z", "event": "login_attempt", "source_ip": "192.168.128.2:57958", "username": "admin", "password": "adddd", "attempt": 2}
+{"timestamp": "2026-04-08T09:21:49.575942Z", "event": "login_attempt", "source_ip": "192.168.128.2:57958", "username": "admin", "password": "hello", "attempt": 3}
+{"timestamp": "2026-04-08T09:21:49.577280Z", "event": "login_success", "source_ip": "192.168.128.2:57958", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-08T09:22:03.970273Z", "event": "command", "source_ip": "192.168.128.2:57958", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:22:09.709292Z", "event": "command", "source_ip": "192.168.128.2:57958", "username": "admin", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:22:36.138898Z", "event": "command", "source_ip": "192.168.128.2:57958", "username": "admin", "command": "cat etc\u001b[D\u001b[D\u001b[D/\u001b[C/etc/shadow"}
+{"timestamp": "2026-04-08T09:30:48.676173Z", "event": "connection", "source_ip": "192.168.128.2:57960"}
+{"timestamp": "2026-04-08T09:30:52.984278Z", "event": "login_attempt", "source_ip": "192.168.128.2:57960", "username": "admin", "password": "admin", "attempt": 1}
+{"timestamp": "2026-04-08T09:30:56.129082Z", "event": "login_attempt", "source_ip": "192.168.128.2:57960", "username": "admin", "password": "admin1", "attempt": 2}
+{"timestamp": "2026-04-08T09:30:57.683380Z", "event": "login_attempt", "source_ip": "192.168.128.2:57960", "username": "admin", "password": "admin2", "attempt": 3}
+{"timestamp": "2026-04-08T09:30:57.684316Z", "event": "login_success", "source_ip": "192.168.128.2:57960", "username": "admin", "attempt": 3}
+{"timestamp": "2026-04-08T09:31:00.389659Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "ls"}
+{"timestamp": "2026-04-08T09:31:02.330772Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "whoami"}
+{"timestamp": "2026-04-08T09:31:35.298748Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "cat /etc/shadow"}
+{"timestamp": "2026-04-08T09:31:54.393080Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "cat passwords.txt"}
+{"timestamp": "2026-04-08T09:32:04.935345Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "ps"}
+{"timestamp": "2026-04-08T09:32:12.001481Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:32:12.006221Z", "event": "sudo_attempt", "source_ip": "192.168.128.2:57960", "username": "admin", "command": "sudo su"}
+{"timestamp": "2026-04-08T09:32:12.006875Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "root", "command": "su"}
+{"timestamp": "2026-04-08T09:32:12.007241Z", "event": "su_attempt", "source_ip": "192.168.128.2:57960", "username": "root"}
+{"timestamp": "2026-04-08T09:33:00.200163Z", "event": "command", "source_ip": "192.168.128.2:57960", "username": "root", "command": "netstat"}
+{"timestamp": "2026-04-08T10:11:57.893240Z", "event": "logout", "source_ip": "192.168.128.2:57960"}
+{"timestamp": "2026-04-08T10:11:57.920028Z", "event": "disconnect", "source_ip": "192.168.128.2:57960"}

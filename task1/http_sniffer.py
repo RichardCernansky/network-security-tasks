@@ -74,17 +74,14 @@ def process_packet(pkt):
 
     if pkt.haslayer(HTTPRequest):
         req = pkt[HTTPRequest]
-
         # Get the requested URL and method
         method = req.Method.decode() if req.Method else "?"
         host   = req.Host.decode()   if req.Host   else "?"
         path   = req.Path.decode()   if req.Path   else "/"
 
         print(f"\n[HTTP Request] {method} http://{host}{path}")
-
         # Check URL for sensitive query params
         findings += extract_from_url(path)
-
         # Build raw header string to check for cookies and auth
         raw_headers = str(req.fields)
         findings += extract_from_headers(raw_headers)
@@ -96,10 +93,8 @@ def process_packet(pkt):
 
     elif pkt.haslayer(HTTPResponse):
         resp = pkt[HTTPResponse]
-
         status = resp.Status_Code.decode() if resp.Status_Code else "?"
         print(f"\n[HTTP Response] Status: {status}")
-
         # Check response headers for Set-Cookie (session tokens etc.)
         raw_headers = str(resp.fields)
         findings += extract_from_headers(raw_headers)

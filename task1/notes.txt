@@ -22,3 +22,6 @@ sudo python3 http_sniffer.py --iface eth0 --filter 192.168.128.2 192.168.128.4
    
 should it write all the ports out?
 should i register rst alone?
+what does the honeypot mean? does it have to run native docker shell or custom?
+do we have to crate the videos and submit the code too?
+task 3 - honeypot and hardening script points in the courses valid?
