@@ -35,7 +35,7 @@
  * 10 000 bytes is well above any legitimate single ICMP exchange
  * yet far below the 65535-byte PoD boundary, giving a safety margin.
  */
-#define POD_SIZE_THRESHOLD  10000
+#define POD_SIZE_THRESHOLD 65535 
 
 #define COOLDOWN_SEC        5       /* Seconds without alert to declare end */
 #define MAX_TRACKED_IDS     2048    /* Fragment-group hash table size       */
