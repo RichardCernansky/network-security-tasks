@@ -26,6 +26,7 @@
 #include <netinet/ip_icmp.h>
 #include <net/ethernet.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 /* ---------- Tunable parameters ---------- */
 
