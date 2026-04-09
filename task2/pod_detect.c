@@ -37,7 +37,7 @@
  */
 #define POD_SIZE_THRESHOLD  10000
 
-#define COOLDOWN_SEC        3       /* Seconds without alert to declare end */
+#define COOLDOWN_SEC        5       /* Seconds without alert to declare end */
 #define MAX_TRACKED_IDS     2048    /* Fragment-group hash table size       */
 
 /* Global state */
@@ -90,9 +90,11 @@ static unsigned frag_hash(uint32_t src, uint32_t dst, uint16_t id)
 static frag_group_t *find_group(uint32_t src, uint32_t dst, uint16_t id,
                                 time_t now)
 {
+    /* get hash */
     unsigned idx = frag_hash(src, dst, id);
 
     for (unsigned i = 0; i < MAX_TRACKED_IDS; i++) {
+        /* linear probe from the hashed idx*/
         unsigned slot = (idx + i) % MAX_TRACKED_IDS;
         frag_group_t *g = &g_det.groups[slot];
 
@@ -112,7 +114,7 @@ static frag_group_t *find_group(uint32_t src, uint32_t dst, uint16_t id,
             return g;
         }
 
-        /* Evict stale entries (> 30 seconds old) */
+        /* occupy stale entries (> 30 seconds old) */
         if (g->active && difftime(now, g->first_seen) > 30.0) {
             memset(g, 0, sizeof(*g));
             g->src_ip     = src;

