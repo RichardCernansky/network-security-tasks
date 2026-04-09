@@ -40,7 +40,7 @@
 #define MAX_TRACKED_IDS     2048    /* Fragment-group hash table size       */
 
 /* Global state */
-static volatile sig_atomic_t g_running = 1;
+static volatile sig_atomic_t running = 1;
 
 /*
  * Fragment group: tracks all fragments sharing the same
@@ -69,7 +69,7 @@ static pcap_t *g_handle = NULL;
 static void sig_handler(int sig)
 {
     (void)sig;
-    g_running = 0;
+    running = 0;
     if (g_handle) {
         pcap_breakloop(g_handle);
     }
@@ -215,7 +215,7 @@ static void packet_handler(u_char *user,
                                    ntohs(iph->id), now);
     if (!grp) return;
 
-    /* Update for specific attacker estimated reassembled size only if bigger (max of all fragment ends) */
+    /* Update for specific attacker estimated reassembled size only if bigger */
     if (frag_end > grp->total_bytes) {
         grp->total_bytes = frag_end;
     }
@@ -253,7 +253,7 @@ static void packet_handler(u_char *user,
 
         if (grp->total_bytes > 65535) {
             print_time();
-            printf("    >> CLASSIC PING OF DEATH: exceeds 65535 byte limit!\n");
+            printf("    >> PING OF DEATH: exceeds 65535 byte limit!\n");
         }
     }
 
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
            POD_SIZE_THRESHOLD, COOLDOWN_SEC);
     printf("[*] Press Ctrl+C to stop.\n\n");
 
-    while (g_running) {
+    while (running) {
         int ret = pcap_dispatch(handle, 64, packet_handler, NULL);
         if (ret < 0) {
             if (ret == PCAP_ERROR_BREAK) break;
